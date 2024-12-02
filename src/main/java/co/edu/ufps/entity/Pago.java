@@ -25,4 +25,16 @@ public class Pago {
     private Double valor;
 
     private Integer cuotas;
+
+    // Constructor vacío necesario para JPA
+    public Pago() {}
+
+    // Constructor con parámetros para la creación del objeto
+    public Pago(Compra compra, TipoPago tipoPago, String tarjetaTipo, Integer cuotas, Double valor) {
+        this.compra = compra;
+        this.tipoPago = tipoPago;
+        this.tarjetaTipo = tarjetaTipo;
+        this.cuotas = cuotas;
+        this.valor = valor;
+    }
 }

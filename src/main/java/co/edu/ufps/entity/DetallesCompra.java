@@ -26,4 +26,16 @@ public class DetallesCompra {
 
     @Column(precision = 5, scale = 2)
     private Double descuento;
+
+    // Constructor vacío necesario para JPA
+    public DetallesCompra() {}
+
+    // Constructor con parámetros
+    public DetallesCompra(Compra compra, Producto producto, Integer cantidad, Double precio, Double descuento) {
+        this.compra = compra;
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.precio = precio;
+        this.descuento = descuento;
+    }
 }

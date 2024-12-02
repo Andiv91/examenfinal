@@ -39,4 +39,20 @@ public class Compra {
 
     @Column(length = 1000)
     private String observaciones;
+
+    // Constructor vacío necesario para JPA
+    public Compra() {}
+
+    // Constructor con parámetros
+    public Compra(Cliente cliente, Tienda tienda, Vendedor vendedor, Cajero cajero,
+                  Double total, Double impuestos, LocalDateTime fecha, String observaciones) {
+        this.cliente = cliente;
+        this.tienda = tienda;
+        this.vendedor = vendedor;
+        this.cajero = cajero;
+        this.total = total;
+        this.impuestos = impuestos;
+        this.fecha = fecha;
+        this.observaciones = observaciones;
+    }
 }

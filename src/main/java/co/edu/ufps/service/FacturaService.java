@@ -1,5 +1,6 @@
 package co.edu.ufps.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,7 @@ import co.edu.ufps.entity.Producto;
 import co.edu.ufps.entity.Tienda;
 import co.edu.ufps.entity.TipoPago;
 import co.edu.ufps.entity.Vendedor;
+import co.edu.ufps.entityDTO.ConsultarFacturaRequestDTO;
 import co.edu.ufps.entityDTO.ConsultarFacturaResponseDTO;
 import co.edu.ufps.entityDTO.FacturaRequestDTO;
 import co.edu.ufps.entityDTO.FacturaResponseDTO;
@@ -27,7 +29,7 @@ import co.edu.ufps.repository.ProductoRepository;
 import co.edu.ufps.repository.TiendaRepository;
 import co.edu.ufps.repository.TipoPagoRepository;
 import co.edu.ufps.repository.VendedorRepository;
-
+import java.time.LocalDateTime;
 @Service
 public class FacturaService {
 

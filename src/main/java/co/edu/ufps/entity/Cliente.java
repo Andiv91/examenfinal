@@ -19,4 +19,14 @@ public class Cliente {
     @ManyToOne
     @JoinColumn(name = "tipo_documento_id", nullable = false)
     private TipoDocumento tipoDocumento;
+
+    // Constructor personalizado
+    public Cliente(String nombre, String documento, TipoDocumento tipoDocumento) {
+        this.nombre = nombre;
+        this.documento = documento;
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    // Si prefieres que Lombok genere el constructor, usa la anotación @AllArgsConstructor
+    // @AllArgsConstructor
 }
