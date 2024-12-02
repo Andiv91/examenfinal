@@ -1,0 +1,5 @@
+package co.edu.ufps.repository;
+
+public class TipoPagoRepository {
+
+}
