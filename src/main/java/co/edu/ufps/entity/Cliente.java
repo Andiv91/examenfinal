@@ -27,6 +27,6 @@ public class Cliente {
         this.tipoDocumento = tipoDocumento;
     }
 
-    // Si prefieres que Lombok genere el constructor, usa la anotación @AllArgsConstructor
+    // Si prefieres que Lombok genere el constructor, puedes usar la anotación @AllArgsConstructor
     // @AllArgsConstructor
 }

@@ -1,5 +1,6 @@
 package co.edu.ufps.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import co.edu.ufps.entity.DetallesCompra;
 import co.edu.ufps.entity.Pago;
 import co.edu.ufps.entity.Producto;
 import co.edu.ufps.entity.Tienda;
+import co.edu.ufps.entity.TipoDocumento;
 import co.edu.ufps.entity.TipoPago;
 import co.edu.ufps.entity.Vendedor;
 import co.edu.ufps.entityDTO.ConsultarFacturaRequestDTO;
@@ -25,26 +27,41 @@ import co.edu.ufps.exception.CustomException;
 import co.edu.ufps.repository.CajeroRepository;
 import co.edu.ufps.repository.ClienteRepository;
 import co.edu.ufps.repository.CompraRepository;
+import co.edu.ufps.repository.DetallesCompraRepository;
+import co.edu.ufps.repository.PagoRepository;
 import co.edu.ufps.repository.ProductoRepository;
 import co.edu.ufps.repository.TiendaRepository;
 import co.edu.ufps.repository.TipoPagoRepository;
+import co.edu.ufps.repository.TipoDocumentoRepository;
 import co.edu.ufps.repository.VendedorRepository;
 import java.time.LocalDateTime;
+
 @Service
 public class FacturaService {
 
     private final CompraRepository compraRepository;
     private final ClienteRepository clienteRepository;
+    private final TipoDocumentoRepository tipoDocumentoRepository;
     private final ProductoRepository productoRepository;
     private final TipoPagoRepository tipoPagoRepository;
     private final VendedorRepository vendedorRepository;
     private final CajeroRepository cajeroRepository;
     private final TiendaRepository tiendaRepository;
+    private final DetallesCompraRepository detallesCompraRepository;
+    private final PagoRepository pagoRepository;
 
-    public FacturaService(CompraRepository compraRepository, ClienteRepository clienteRepository,
-                          ProductoRepository productoRepository, TipoPagoRepository tipoPagoRepository,
-                          VendedorRepository vendedorRepository, CajeroRepository cajeroRepository,
-                          TiendaRepository tiendaRepository) {
+    public FacturaService(
+            CompraRepository compraRepository,
+            ClienteRepository clienteRepository,
+            ProductoRepository productoRepository,
+            TipoPagoRepository tipoPagoRepository,
+            VendedorRepository vendedorRepository,
+            CajeroRepository cajeroRepository,
+            TiendaRepository tiendaRepository,
+            DetallesCompraRepository detallesCompraRepository,
+            PagoRepository pagoRepository,
+            TipoDocumentoRepository tipoDocumentoRepository) {
+        
         this.compraRepository = compraRepository;
         this.clienteRepository = clienteRepository;
         this.productoRepository = productoRepository;
@@ -52,8 +69,10 @@ public class FacturaService {
         this.vendedorRepository = vendedorRepository;
         this.cajeroRepository = cajeroRepository;
         this.tiendaRepository = tiendaRepository;
+        this.detallesCompraRepository = detallesCompraRepository;
+        this.pagoRepository = pagoRepository;
+        this.tipoDocumentoRepository = tipoDocumentoRepository;  // Asignación de la nueva dependencia
     }
-
     public FacturaResponseDTO crearFactura(String tiendaUuid, FacturaRequestDTO request) {
         // Validar tienda
         Tienda tienda = tiendaRepository.findByUuid(tiendaUuid)
@@ -128,11 +147,14 @@ public class FacturaService {
         }
 
         // Respuesta
-        return new FacturaResponseDTO(compra.getId(), totalFactura, compra.getFecha());
+        return new FacturaResponseDTO("SUCCESS", "Factura creada correctamente", compra.getId(), totalFactura, compra.getFecha());
     }
 
     private Cliente registrarCliente(FacturaRequestDTO.ClienteRequestDTO clienteReq) {
-        Cliente cliente = new Cliente(clienteReq.getNombre(), clienteReq.getDocumento(), clienteReq.getTipoDocumento());
+        TipoDocumento tipoDocumento = tipoDocumentoRepository.findByNombre(clienteReq.getTipoDocumento())
+                .orElseThrow(() -> new CustomException("Tipo de documento no encontrado", HttpStatus.NOT_FOUND));
+        
+        Cliente cliente = new Cliente(clienteReq.getNombre(), clienteReq.getDocumento(), tipoDocumento);
         return clienteRepository.save(cliente);
     }
     public ConsultarFacturaResponseDTO consultarFactura(ConsultarFacturaRequestDTO request, String tiendaUuid) {
@@ -145,7 +167,7 @@ public class FacturaService {
         }
 
         // Validar existencia de la factura
-        Compra factura = facturaRepository.findById(request.getFactura())
+        Compra factura = compraRepository.findById(request.getFactura())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Factura no encontrada"));
 
         if (!factura.getCliente().getDocumento().equals(request.getCliente())) {
@@ -154,8 +176,10 @@ public class FacturaService {
 
         // Construir la respuesta
         ConsultarFacturaResponseDTO response = new ConsultarFacturaResponseDTO();
-        response.setTotal(factura.getTotal());
-        response.setImpuestos(factura.getImpuestos());
+        
+        // Cambiar a BigDecimal al asignar los valores de total e impuestos
+        response.setTotal(BigDecimal.valueOf(factura.getTotal()));  // Convierte de Double a BigDecimal
+        response.setImpuestos(BigDecimal.valueOf(factura.getImpuestos()));  // Convierte de Double a BigDecimal
 
         // Datos del cliente
         ConsultarFacturaResponseDTO.ClienteFacturaDTO clienteDTO = new ConsultarFacturaResponseDTO.ClienteFacturaDTO();
@@ -170,9 +194,9 @@ public class FacturaService {
             productoDTO.setReferencia(detalle.getProducto().getReferencia());
             productoDTO.setNombre(detalle.getProducto().getNombre());
             productoDTO.setCantidad(detalle.getCantidad());
-            productoDTO.setPrecio(detalle.getProducto().getPrecio());
-            productoDTO.setDescuento(detalle.getDescuento());
-            productoDTO.setSubtotal(detalle.getPrecio().subtract(detalle.getDescuento()));
+            productoDTO.setPrecio(BigDecimal.valueOf(detalle.getProducto().getPrecio())); // Cambiar precio a BigDecimal
+            productoDTO.setDescuento(BigDecimal.valueOf(detalle.getDescuento())); // Cambiar descuento a BigDecimal
+            productoDTO.setSubtotal(BigDecimal.valueOf(detalle.getPrecio()).subtract(BigDecimal.valueOf(detalle.getDescuento()))); // Cambiar subtotal a BigDecimal
             return productoDTO;
         }).collect(Collectors.toList());
         response.setProductos(productosDTO);

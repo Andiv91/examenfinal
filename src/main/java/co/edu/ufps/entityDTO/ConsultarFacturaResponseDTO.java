@@ -7,8 +7,8 @@ import lombok.Data;
 
 @Data
 public class ConsultarFacturaResponseDTO {
-    private BigDecimal total;
-    private BigDecimal impuestos;
+    private BigDecimal total;  // Cambiado a BigDecimal
+    private BigDecimal impuestos;  // Cambiado a BigDecimal
     private ClienteFacturaDTO cliente;
     private List<ProductoFacturaDTO> productos;
     private CajeroFacturaDTO cajero;
