@@ -34,7 +34,6 @@ import co.edu.ufps.repository.TiendaRepository;
 import co.edu.ufps.repository.TipoPagoRepository;
 import co.edu.ufps.repository.TipoDocumentoRepository;
 import co.edu.ufps.repository.VendedorRepository;
-import java.time.LocalDateTime;
 
 @Service
 public class FacturaService {

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -39,6 +40,10 @@ public class Compra {
 
     @Column(length = 1000)
     private String observaciones;
+
+    // Relación OneToMany con DetallesCompra
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetallesCompra> detallesCompra;
 
     // Constructor vacío necesario para JPA
     public Compra() {}
