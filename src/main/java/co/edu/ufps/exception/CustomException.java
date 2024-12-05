@@ -5,7 +5,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus
 public class CustomException extends RuntimeException {
-    private final HttpStatus statusCode;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final HttpStatus statusCode;
 
     public CustomException(String message, HttpStatus statusCode) {
         super(message);

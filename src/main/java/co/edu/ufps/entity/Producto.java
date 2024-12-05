@@ -1,5 +1,6 @@
 package co.edu.ufps.entity;
 
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,8 +17,8 @@ public class Producto {
     @Column(length = 1000)
     private String descripcion;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private Double precio;
+    @Column
+    private double precio;
 
     @ManyToOne
     @JoinColumn(name = "tipo_producto_id", nullable = false)

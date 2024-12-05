@@ -1,14 +1,13 @@
 package co.edu.ufps.entityDTO;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import lombok.Data;
 
 @Data
 public class ConsultarFacturaResponseDTO {
-    private BigDecimal total;  // Cambiado a BigDecimal
-    private BigDecimal impuestos;  // Cambiado a BigDecimal
+    private double total;  // Cambiado a BigDecimal
+    private double impuestos;  // Cambiado a BigDecimal
     private ClienteFacturaDTO cliente;
     private List<ProductoFacturaDTO> productos;
     private CajeroFacturaDTO cajero;
@@ -25,9 +24,9 @@ public class ConsultarFacturaResponseDTO {
         private String referencia;
         private String nombre;
         private int cantidad;
-        private BigDecimal precio;
-        private BigDecimal descuento;
-        private BigDecimal subtotal;
+        private double precio;
+        private double descuento;
+        private double subtotal;
     }
 
     @Data

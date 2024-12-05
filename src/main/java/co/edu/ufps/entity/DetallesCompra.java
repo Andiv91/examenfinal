@@ -1,5 +1,7 @@
 package co.edu.ufps.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,17 +23,17 @@ public class DetallesCompra {
     @Column(nullable = false)
     private Integer cantidad;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private Double precio;
+    @Column
+    private double precio;
 
-    @Column(precision = 5, scale = 2)
-    private Double descuento;
+    @Column
+    private double descuento;
 
     // Constructor vacío necesario para JPA
     public DetallesCompra() {}
 
     // Constructor con parámetros
-    public DetallesCompra(Compra compra, Producto producto, Integer cantidad, Double precio, Double descuento) {
+    public DetallesCompra(Compra compra, Producto producto, Integer cantidad, double precio, double descuento) {
         this.compra = compra;
         this.producto = producto;
         this.cantidad = cantidad;

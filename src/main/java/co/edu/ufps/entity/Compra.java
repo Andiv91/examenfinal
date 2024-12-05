@@ -3,6 +3,7 @@ package co.edu.ufps.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,11 +30,11 @@ public class Compra {
     @JoinColumn(name = "cajero_id", nullable = false)
     private Cajero cajero;
 
-    @Column(precision = 10, scale = 2, nullable = false)
-    private Double total;
+    @Column
+    private double total;
 
-    @Column(precision = 5, scale = 2, nullable = false)
-    private Double impuestos;
+    @Column
+    private double impuestos;
 
     @Column(nullable = false)
     private LocalDateTime fecha;
@@ -50,7 +51,7 @@ public class Compra {
 
     // Constructor con parámetros
     public Compra(Cliente cliente, Tienda tienda, Vendedor vendedor, Cajero cajero,
-                  Double total, Double impuestos, LocalDateTime fecha, String observaciones) {
+    		double total, double impuestos, LocalDateTime fecha, String observaciones) {
         this.cliente = cliente;
         this.tienda = tienda;
         this.vendedor = vendedor;

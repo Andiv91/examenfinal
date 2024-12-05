@@ -1,5 +1,6 @@
 package co.edu.ufps.entity;
 
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,8 +22,8 @@ public class Pago {
     @Column(length = 20)
     private String tarjetaTipo; // Solo acepta "VISA" o "MASTERCARD"
 
-    @Column(precision = 10, scale = 2)
-    private Double valor;
+    @Column
+    private double valor;
 
     private Integer cuotas;
 
@@ -30,7 +31,7 @@ public class Pago {
     public Pago() {}
 
     // Constructor con parámetros para la creación del objeto
-    public Pago(Compra compra, TipoPago tipoPago, String tarjetaTipo, Integer cuotas, Double valor) {
+    public Pago(Compra compra, TipoPago tipoPago, String tarjetaTipo, Integer cuotas, double valor) {
         this.compra = compra;
         this.tipoPago = tipoPago;
         this.tarjetaTipo = tarjetaTipo;
