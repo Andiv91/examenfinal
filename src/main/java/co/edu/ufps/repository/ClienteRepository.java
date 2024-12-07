@@ -1,10 +1,10 @@
 package co.edu.ufps.repository;
-
-import co.edu.ufps.entity.Cliente;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import co.edu.ufps.entity.Cliente;
 
-import java.util.Optional;
-
+@Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
-    Optional<Cliente> findByDocumentoAndTipoDocumentoNombre(String documento, String nombreTipoDocumento);
+	public List<Cliente> findAllByDocumento(String documento);
 }

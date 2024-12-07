@@ -1,6 +1,11 @@
 package co.edu.ufps.entity;
-
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Entity
@@ -9,24 +14,9 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(nullable = false, length = 20)
     private String nombre;
-
-    @Column(nullable = false, length = 100)
     private String documento;
-
-    @ManyToOne
-    @JoinColumn(name = "tipo_documento_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tipo_documento_id")
     private TipoDocumento tipoDocumento;
-
-    // Constructor personalizado
-    public Cliente(String nombre, String documento, TipoDocumento tipoDocumento) {
-        this.nombre = nombre;
-        this.documento = documento;
-        this.tipoDocumento = tipoDocumento;
-    }
-
-    // Si prefieres que Lombok genere el constructor, puedes usar la anotación @AllArgsConstructor
-    // @AllArgsConstructor
 }

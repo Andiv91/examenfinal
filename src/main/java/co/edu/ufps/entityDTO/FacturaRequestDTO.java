@@ -1,47 +1,60 @@
 package co.edu.ufps.entityDTO;
-
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import co.edu.ufps.entity.Compra;
+import co.edu.ufps.entity.DetallesCompra;
+import co.edu.ufps.entity.Pago;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class FacturaRequestDTO {
-    private double impuesto;
-    private ClienteRequestDTO cliente;
-    private List<ProductoRequestDTO> productos;
-    private List<MedioPagoRequestDTO> mediosPago;
-    private VendedorRequestDTO vendedor;
-    private CajeroRequestDTO cajero;
+	private BigDecimal impuesto;
+	private ClienteDTO cliente;
+	private List<DetallesCompraDTO> productos;
+	
+	@JsonProperty("medios_pago")
+	private List<PagoDTO> mediosPago;
+	private VendedorDTO vendedor;
+	private CajeroDTO cajero;
+	
+	public Compra toEntity() {
+		Compra compra = new Compra();
+		compra.setImpuestos(this.impuesto);
+		
+		if(this.cliente != null) {
+			compra.setCliente(this.cliente.toEntity());
+		}
+		
+		if(this.productos != null) {
+			List<DetallesCompra> productos = new ArrayList<DetallesCompra>();
+			for(DetallesCompraDTO detalleCompra : this.productos) {
+				productos.add(detalleCompra.toEntity());
+			}
+			
+			compra.setDetallesCompra(productos);
+		}
 
-    @Data
-    public static class ClienteRequestDTO {
-        private String documento;
-        private String nombre;
-        private String tipoDocumento;
-    }
-
-    @Data
-    public static class ProductoRequestDTO {
-        private String referencia;
-        private int cantidad;
-        private double descuento;
-    }
-
-    @Data
-    public static class MedioPagoRequestDTO {
-        private String tipoPago;
-        private String tipoTarjeta;
-        private int cuotas;
-        private double valor;
-    }
-
-    @Data
-    public static class VendedorRequestDTO {
-        private String documento;
-    }
-
-    @Data
-    public static class CajeroRequestDTO {
-        private String token;
-    }
+		if(this.mediosPago != null) {
+			List<Pago> pagos = new ArrayList<Pago>();
+			for(PagoDTO pago : this.mediosPago) {
+				pagos.add(pago.toEntity());
+			}
+			compra.setPagos(pagos);
+		}
+		
+		
+		if(this.vendedor != null) {
+			compra.setVendedor(this.vendedor.toEntity());
+		}
+		
+		if(this.cajero != null) {
+			compra.setCajero(this.cajero.toEntity());
+		}
+		
+		return compra;
+	}
 }

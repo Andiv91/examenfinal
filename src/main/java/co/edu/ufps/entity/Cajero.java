@@ -1,6 +1,11 @@
 package co.edu.ufps.entity;
-
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Entity
@@ -9,20 +14,11 @@ public class Cajero {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(nullable = false, length = 200)
     private String nombre;
-
-    @Column(length = 20)
     private String documento;
-
-    @ManyToOne
-    @JoinColumn(name = "tienda_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tienda_id")
     private Tienda tienda;
-
-    @Column(length = 50)
     private String email;
-
-    @Column(length = 100)
     private String token;
 }

@@ -1,11 +1,16 @@
 package co.edu.ufps.entity;
-
-import jakarta.persistence.*;
-import lombok.Data;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.security.Timestamp;
 import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import lombok.Data;
 
 @Entity
 @Data
@@ -13,52 +18,26 @@ public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
-
-    @ManyToOne
-    @JoinColumn(name = "tienda_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tienda_id")
     private Tienda tienda;
-
-    @ManyToOne
-    @JoinColumn(name = "vendedor_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "vendedor_id")
     private Vendedor vendedor;
-
-    @ManyToOne
-    @JoinColumn(name = "cajero_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cajero_id")
     private Cajero cajero;
-
-    @Column
-    private double total;
-
-    @Column
-    private double impuestos;
-
-    @Column(nullable = false)
-    private LocalDateTime fecha;
-
-    @Column(length = 1000)
+    private BigDecimal total;
+    private BigDecimal impuestos;
+    private Timestamp fecha;
     private String observaciones;
-
-    // Relación OneToMany con DetallesCompra
-    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
+    
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
     private List<DetallesCompra> detallesCompra;
-
-    // Constructor vacío necesario para JPA
-    public Compra() {}
-
-    // Constructor con parámetros
-    public Compra(Cliente cliente, Tienda tienda, Vendedor vendedor, Cajero cajero,
-    		double total, double impuestos, LocalDateTime fecha, String observaciones) {
-        this.cliente = cliente;
-        this.tienda = tienda;
-        this.vendedor = vendedor;
-        this.cajero = cajero;
-        this.total = total;
-        this.impuestos = impuestos;
-        this.fecha = fecha;
-        this.observaciones = observaciones;
-    }
+    
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
+    private List<Pago> pagos;
 }
